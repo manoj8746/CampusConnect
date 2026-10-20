@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 
@@ -9,10 +8,7 @@ const {
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Register for an event
 router.post("/:eventId", authMiddleware, registerForEvent);
-
-// View my registered events
 router.get("/my", authMiddleware, getMyRegistrations);
 
 module.exports = router;
