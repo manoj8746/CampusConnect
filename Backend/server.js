@@ -1,5 +1,7 @@
+
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 
 const app = express();
@@ -15,6 +17,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const registrationRoutes = require("./routes/registrationRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
+const certificateTemplateRoutes = require("./routes/certificateTemplateRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const suggestionRoutes = require("./routes/suggestionRoutes");
 const profileRoutes = require("./routes/profileRoutes");
@@ -27,28 +30,22 @@ app.get("/api", (req, res) => {
     });
 });
 
-// Mount routes
+// Mount API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/registrations", registrationRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/certificates", certificateRoutes);
+app.use("/api/certificate-templates", certificateTemplateRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/suggestions", suggestionRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Temporary diagnostic: display registered admin routes
-console.log(
-    "Admin routes loaded:",
-    adminRoutes.stack
-        .filter((layer) => layer.route)
-        .map(
-            (layer) =>
-                Object.keys(layer.route.methods)[0].toUpperCase() +
-                " " +
-                layer.route.path
-        )
+// Serve uploaded files
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "uploads"))
 );
 
 // Start server
